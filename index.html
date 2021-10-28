@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>宫格游戏</title>
+        <style>
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+                margin: 0;
+                padding: 0;
+            }
+
+            .app {
+                height: 100%;
+                width: 100%;
+            }
+
+            .app .game {
+                display: flex;
+                flex-flow: row wrap;
+                list-style: none;
+                padding: 0;
+                margin: 0 auto;
+                height: 302px;
+                width: 302px;
+                border: 1px solid #000;
+                
+            }
+
+            .game .gift {
+                width: 100px;
+                height: 100px;
+                flex-shrink: 0;
+                line-height: 100px;
+                text-align: center;
+            }
+            .game .gift.active {
+                background-color: #ffe6cc;
+            }
+            .game .gift.btn {
+                background-color: orange;
+            }
+            .game .gift:nth-child(1) {
+                order: 3;
+            }
+
+            .game .gift:nth-child(2) {
+                order: 6;
+                border-top: 1px solid #000;
+                border-bottom: 1px solid #000;
+                
+
+            }
+
+            .game .gift:nth-child(3) {
+                order: 9;
+            }
+
+            .game .gift:nth-child(4) {
+                order: 8;
+                border-left: 1px solid #000;
+                border-right: 1px solid #000;
+            }
+
+            .game .gift:nth-child(5) {
+                order: 7;
+            }
+
+            .game .gift:nth-child(6) {
+                order: 4;
+                border-top: 1px solid #000;
+                border-bottom: 1px solid #000;
+            }
+
+            .game .gift:nth-child(7) {
+                order: 1;
+            }
+
+            .game .gift:nth-child(8) {
+                order: 2;
+                border-left: 1px solid #000;
+                border-right: 1px solid #000;
+            }
+
+            .game .gift:nth-child(9) {
+                border: 1px solid #000;
+                order: 5;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="app">
+            <ul class="game"></ul>
+        </div>
+        <script>
+            const playDom = document.createElement("li");
+            playDom.innerHTML = "开始";
+            playDom.className = "gift btn";
+            playDom.addEventListener("click", drawPrizes);
+
+            const gameDom = document.querySelector(".game"),
+                giftDomList = [],
+                
+                gameModle = "fixed"; //  random 随机模式 各个适配中奖概率随机生成， control 可控模式 ， 适配中奖概率 控制生成 , fixed 默认所有商品中奖概率相等。
+            /*
+            gameModle = "random",
+            gameModle = "control",
+
+            */
+            let goods = ["谢谢惠顾", "小熊抱枕", "小度音响", "电风扇", "格力冰箱", "手环", "华为", "iPhone X"];
+            goods = goods.map((i) => {
+                return {
+                    name: i,
+                    giftRate: "",
+                };
+            });
+            controlGiftRate('control', 'iPhone X', 50 ) // 选择 iphone x 中奖概率为 50%
+            // controlGiftRate('control', 'iPhone X',  100 )  // 控制 iPhone X 必定中奖
+            // controlGiftRate("random"); //  随机生成中奖概率
+            // controlGiftRate("fixed"); // 每个奖品中奖概率一样
+
+            async function controlGiftRate(modle, gift, rate) {
+                switch (modle) {
+                    case "random":
+                        goods = await createRandomRate(goods) // .catch (err => 'err')
+                        break;
+                    case "control":
+                        let otherRate = (100 - rate) / (goods.length - 1);
+                        goods = goods.map((i) => {
+                            i.name === gift ? (i.giftRate = rate) : (i.giftRate = otherRate);
+                            return i;
+                        });
+                        break;
+                    case "fixed":
+                    default:
+                        goods = goods.map((i) => ({
+                            ...i,
+                            giftRate: 100 / goods.length,
+                        }));
+                }
+            }
+            console.log(goods);
+            goods.forEach((i, index) => {
+                let giftDom = document.createElement("li");
+                giftDom.className = "gift";
+                giftDom.innerHTML = i.name;
+                gameDom.appendChild(giftDom);
+                giftDomList.push(giftDom);
+                if (index === goods.length - 1) {
+                    // 最后插入 点击按钮
+                    gameDom.appendChild(playDom);
+                }
+            });
+
+            function createRandomRate(goods) {
+                // 创建奖品随机概率
+                return new Promise((reject, resolve) => {
+                    const _createRandomRate = (goods) => {
+                        let remainRate = 100,
+                            allRandomRates = 0;
+                        allRates = [];
+                        goods = goods.map((i, index) => {
+                            let _rate = Math.floor(Math.random() * remainRate + 1);
+                            i.giftRate = _rate;
+                            allRandomRates += _rate;
+                            if (index === goods.length - 1) {
+                                i.giftRate = 100 - allRandomRates;
+                            }
+                            allRates.push(i.giftRate);
+                            remainRate = remainRate - _rate;
+                            return i;
+                        });
+                        // 不能由重复的概率和 负数的概率
+                        if ([...new Set(allRates)].length === goods.length && allRates.every((i) => i >= 0)) {
+                            resolve(goods);
+                        } else {
+                            _createRandomRate(goods);
+                        }
+                    };
+                    _createRandomRate(goods);
+                });
+            }
+
+            // 抽取奖品
+            console.log(goods, 'xxx');
+            let playing = false;
+            function drawPrizes() {
+                
+                if (playing) return;
+                playing = true;
+                let gift = Math.random() * 100 + 1,
+                    nearlyRate = 0;
+                    console.log(goods, 'xxx');
+                goods.forEach((i, index) => {
+                    // 确定中奖奖品
+                    nearlyRate += i.giftRate;
+                    if (nearlyRate >= gift) {
+                        i.index = index;
+                        gift = i;
+                    }
+                });
+
+                const times = () => {
+                    let initTimes = 500,
+                        initTimesArr = new Array(goods.length * 5 + gift.index).fill("0");
+
+                    return initTimesArr.map((i, index) => {
+                        i = initTimes;
+                        if (initTimes <= 100) {
+                            //  由慢变快
+                            i = 100;
+                        }
+                        if (index >= initTimesArr.length - 5) {
+                            // 最后变慢
+                            i += 100 * (index - initTimesArr.length + 5);
+                        }
+                        initTimes -= 100;
+                        return i;
+                    });
+                };
+                let runTimes = times(),
+                    currentIndex = 0,
+                    activeDomIndex = 0;
+                    console.log(runTimes, gift, '3');
+                let timer = setTimeout(function runGrid() {
+                    let _timer = setTimeout(() => {
+                        if (currentIndex <= runTimes.length ) {
+                            runGrid();
+                        } else {
+                            playing = false
+                        }
+                        timer && clearTimeout(timer);
+                        _timer && clearTimeout(_timer);
+                    }, runTimes[currentIndex]);
+                    giftDomList.forEach(dom => {
+                        dom.className = 'gift'
+                    })
+                    if (activeDomIndex > goods.length -1) {
+                        activeDomIndex = 0
+                    }
+                    giftDomList[activeDomIndex].className = 'gift active'
+                    currentIndex += 1;
+                    activeDomIndex +=1
+
+                }, 0);
+            }
+        </script>
+    </body>
+</html>
