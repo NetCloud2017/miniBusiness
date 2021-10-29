@@ -120,29 +120,35 @@
                     giftRate: "",
                 };
             });
-            controlGiftRate('control', 'iPhone X', 50 ) // 选择 iphone x 中奖概率为 50%
+            // controlGiftRate('control', 'iPhone X', 50 ) // 选择 iphone x 中奖概率为 50%
             // controlGiftRate('control', 'iPhone X',  100 )  // 控制 iPhone X 必定中奖
-            // controlGiftRate("random"); //  随机生成中奖概率
+            controlGiftRate("random"); //  随机生成中奖概率
             // controlGiftRate("fixed"); // 每个奖品中奖概率一样
 
             async function controlGiftRate(modle, gift, rate) {
-                switch (modle) {
-                    case "random":
-                        goods = await createRandomRate(goods) // .catch (err => 'err')
-                        break;
-                    case "control":
-                        let otherRate = (100 - rate) / (goods.length - 1);
-                        goods = goods.map((i) => {
-                            i.name === gift ? (i.giftRate = rate) : (i.giftRate = otherRate);
-                            return i;
-                        });
-                        break;
-                    case "fixed":
-                    default:
-                        goods = goods.map((i) => ({
-                            ...i,
-                            giftRate: 100 / goods.length,
-                        }));
+                try {
+
+                    switch (modle) {
+                        case "random":
+                            goods = await createRandomRate(goods) //  .catch(err => console.log(err)) 不能把catch 放到这里， 否则 catch 触发后 会 赋值给 goods ;
+                            break;
+                        case "control":
+                            let otherRate = (100 - rate) / (goods.length - 1);
+                            goods = goods.map((i) => {
+                                i.name === gift ? (i.giftRate = rate) : (i.giftRate = otherRate);
+                                return i;
+                            });
+                            break;
+                        case "fixed":
+                        default:
+                            goods = goods.map((i) => ({
+                                ...i,
+                                giftRate: 100 / goods.length,
+                            }));
+                    }
+                } catch (err) {
+                    //  不写则报错： Uncaught (in promise)  
+                    console.log(err, 'exxx')
                 }
             }
             console.log(goods);
