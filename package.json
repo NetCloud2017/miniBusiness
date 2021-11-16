@@ -1,0 +1,25 @@
+{
+  "name": "9gridgame",
+  "version": "1.0.0",
+  "description": "一些小功能\r 九宫格游戏",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon nodeserver.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NetCloud2017/miniBusiness.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NetCloud2017/miniBusiness/issues"
+  },
+  "homepage": "https://github.com/NetCloud2017/miniBusiness#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.14"
+  }
+}
