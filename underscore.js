@@ -1,3 +1,6 @@
+import {log} from "./utils"
+'log'
+log.logMap()
 var _ = (underscore = (function (root) {
     var _ = function (obj) {
         if (obj instanceof _) {
