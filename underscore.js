@@ -106,28 +106,146 @@ export var _ = (underscore = (function (root) {
 
     _.identity = function (value) {
         return value;
-    }
+    };
     // 剩余参数；
     _.restArguments = function (func) {
-        var  startIndex  = arguments.length - 1;
-        return function() {
+        // func.length  是func 的形参个数， rest 参数一般放在最后， 所以rest 参数的开始位置是 func.length -1
+        var startIndex = func.length - 1;
+        return function () {
             var length = arguments.length - startIndex,
-            rest = Array(length),
-            index = 0;
-            
+                rest = Array(length),
+                index = 0;
+
             // rest 数组中的成员
-            for (;index < length; index++) {
-                rest[index] = arguments[index + startIndex]
+            for (; index < length; index++) {
+                rest[index] = arguments[index + startIndex];
             }
             // 非 rest 参数成员的值 一一对应；
-            var args = Array(startIndex + 1) 
+            var args = Array(startIndex + 1);
             for (index = 0; index < startIndex; index++) {
                 args[index] = arguments[index];
             }
-            args[startIndex] = rest;
-            return func.apply(this, args)
+            args[startIndex] = rest; // 最后 args 长成 [参数，[rest 参数]]
+            return func.apply(this, args);
+        };
+    };
+    // Object.create 的 polyfill
+    var Ctor = function () {};
+    var baseCreate = function (prototype) {
+        if (!_.isObject(prototype)) return {};
+        if (Objectj.create) return Objectj.create(prototype);
+        Ctor.prototype = prototype;
+        var result = new Ctor();
+        Ctor.prototype = null;
+        return result;
+    };
+    _.baseCreate = baseCreate;
+
+    var createReduce = function (dir) {
+        // direction 方向；
+        var reduce = function (obj, iteratee, memo, init) {
+            var keys = !_.isArray(obj) && Object.keys(obj),
+                length = (keys || obj).length,
+                index = dir > 0 ? 0 : length - 1;
+            if (!init) {
+                memo = obj[keys ? keys[index] : index];
+                index += dir;
+            }
+            for (; index >= 0 && index < length; index += dir) {
+                var currentKey = keys ? keys[index] : index;
+                memo = iteratee(memo, obj[currentKey], currentKey, obj);
+            }
+            return memo;
+        };
+
+        //memo  最终能累加的结果     每一次累加的过程
+        return function (obj, iteratee, memo, context) {
+            var init = arguments.length >= 3;
+            return reduce(obj, optimizeCb(iteratee, context, 4), memo, init);
+        };
+    };
+    _.reduce = createReduce(1); // 1 || -1；
+    //predicate  真值检测(重点: 返回值)
+    _.filter = _.select = function (arr, predicate, context) {
+        var result = [];
+        predicate = cb(predicate, context);
+        _.each(arr, function (value, index, list) {
+            if (predicate(value, index, list)) result.push(value);
+        });
+        return result;
+    };
+    // 数组、 对象都可以遍历；
+    _.each = function (target, cb) {
+        var key,
+            i = 0;
+        if (_.isArray(target)) {
+            var length = target.length;
+            for (; i < length; i++) {
+                cb.call(target, target[i], i);
+            }
+        } else {
+            for (key in target) {
+                cb.call(target, key, target[key]);
+            }
         }
+    };
+
+    //去掉数组中所有的假值   _.identity = function(value){return value};
+    _.compact = function (arr) {
+        return _.filter(arr, _.identity);
+    };
+
+    // 返回某一个范围内的数值组成的数组 5   stop == 5      start === 0   step === 1
+    _.range = function (start, stop, step) {
+        if (stop == null) {
+            stop = start || 0;
+            start = 0;
+        }
+        step = step || 1; //2
+        // 返回数组的长度  返回大于等于参数x的最小整数 向上取整 10/2  5
+        var length = Math.max(Math.ceil((stop - start) / step), 0);
+        // 返回的数组
+        var range = Array(length);
+        for (var index = 0; index < length; index++, start += step) {
+            range[index] = start;
+        }
+        return range;
+    };
+    var flatten = function (arr, shallow) {
+        var ret = [],
+            index = 0;
+        for (var i = 0; i < arr.length; i++) {
+            var value = arr[i];
+            // 是数组
+            if (_.isArray(value) || _.isArguments(value)) {
+                // shallow 是否递归全部展开；
+                if (!shallow) {
+                    value = flatten(value, shallow);
+                }
+                var j = 0,
+                    len = value.length;
+                ret.length += len;
+                while (j < len) {
+                    ret[index++] = value[j++];
+                }
+            } else {
+                ret[index++] = value
+            }
+        }
+        return ret;
+    };
+    _.flatten = function (array, shallow) {
+        return flatten(array, shallow)
+    }
+    
+	//返回数组中除了最后一个元素外的其他全部元素。 在arguments对象上特别有用。
+    _.initial = function (array, n) {
+        return [].slice.call(array, 0, Math.max(0, array.length -(n == null ? 1 : n)))
     }
 
+	//返回数组中除了第一个元素外的其他全部元素。传递 n 参数将返回从n开始的剩余所有元素
+    _.rest = function(array, n, guard) {
+        return [].slice.call(array, n == null ? 1 : n);
+    }
     return (root.underscore = root._ = _);
 })(this));
