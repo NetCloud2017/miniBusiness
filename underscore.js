@@ -43,10 +43,7 @@ export var _ = (underscore = (function (root) {
         instance._chain = true;
         return instance;
     };
-    // 辅助函数 obj 数据结果
-    var result = function (instance, obj) {
-        return instance._chain ? _(obj).chain() : obj;
-    };
+   
     _.prototype.value = function () {
         // 返回 初始对象
         return this._wrapped;
@@ -234,6 +231,7 @@ export var _ = (underscore = (function (root) {
         }
         return ret;
     };
+    // 数组 扁平化
     _.flatten = function (array, shallow) {
         return flatten(array, shallow)
     }
@@ -247,5 +245,122 @@ export var _ = (underscore = (function (root) {
     _.rest = function(array, n, guard) {
         return [].slice.call(array, n == null ? 1 : n);
     }
+    // 偏函数
+    _.partial = function (func) {
+        
+        // 返回一个函数的副本
+        var args = [].slice.call(arguments, 1);
+        var  bound = function() {
+            var index = 0;
+            var length = args.length;
+            var ret  = Array(length);
+            for(var i =0;i<length; i++) {
+                // 获取 func 之外的参数
+                ret[i] = args[i];
+            }
+            while (index < arguments.length) {
+                // 获取 调用 bound 时传近来的参数
+                ret.push(arguments[index++]);
+            }
+            return func.apply(this, ret);
+        }
+        return bound;
+    }
+    // 对象有没有该属性
+    _.has = function (obj, key) {
+        return obj != null && hasOwnProperty.call(obj, key);
+    }
+    //存储中间运算结果,提高效率
+	//参数 hasher是个function通过返回值来记录key
+	//_.memoize(function, [hashFunction])
+	// 适用于需要大量重复求值的场景
+	// 比如递归求解斐波那契数
+    /* 
+        求解地 10 项 斐波那契数；
+         var  hasher = function () {
+             var n = arguments[0];
+             console.log(n)
+             return n
+         }
+        var  fibonacci = _.memorize(function(n) {
+            return n< 2 ? n : fibonacci(n -1) + fibonacci(n -2)
+        }, hasher)
+        fibonacci(10);
+        console.log(fibonacci.cache)
+    */
+	_.memorize= function(func, hasher) {
+        var memo = function(key) {
+            // 缓存变量
+            var  cache = memo.cache;
+            // 求 key
+			// 如果传入了 hasher,则用 hasher 函数来记录 key
+			// 否则用参数 key(即memo 方法传入的第一个参数)当key
+            var address = '' + (hasher ? hasher.apply(this, arguments) : key) ;
+
+			// 如果这个 key 还没被求过值 先记录在缓存中.
+            if(!_.has(cache, address)) {
+                cache[address] = func.apply(this, arguments);
+            }
+            return cache[address]
+        }
+        // cache 对象被当做 key-value 键值对缓存中间运算结果
+        memo.cache = {};
+        return memo;
+    }
+    _.isArray = function (array) {
+        if (Array.isArray) return Array.isArray(array)
+       return toString.call(array) === '[object Array]';
+    }   
+    _.isFunction = function (func) {
+        return typeof func === 'function' || false;
+    }
+    
+    _.targeter = function (str) {
+        var tag= `[object ${str}]`
+        return function (arg) {
+            return toString.call(arg) === tag;
+        }
+    }
+    var isArguments = _.targeter('Arguments');
+    (function (){
+        if(!isArguments(arguments)) {
+            // 兼容 ie 9 一下
+            isArguments = function(obj) {
+                return _.has(obj, 'callee')
+            }
+        }
+    }());
+    _.isArguments =  isArguments;
+    _.isBoolean = function () {
+        return obj === true || obj === false || toString.call(obj) === '[object Boolean]';
+    }
+    var  push = Array.prototype.push;
+     // 辅助函数 obj 数据结果
+    var result = function (instance, obj) {
+        return instance._chain ? _(obj).chain() : obj;
+    };
+
+    /*
+     obj 必须以 key: function 形式传入
+     调用方式：_([1,3,4,5,6,7,'a', 'B']).chain().unique().map().value()
+    */
+    _.mixin = function (obj) {
+        //mixin 还没理解透
+        // functions  获取所以的 obj keys 
+        _.each(_.functions(obj), function(name) {
+            // 获取 
+            var func = obj[name];
+
+            _.prototype[name] = function () {
+                var args = [this._wrapped]; // 初始传进的值；
+
+                push.call(args, arguments);
+
+                // 通过chain 进行链式调用。 调用 value 结束链式调用。
+                return result(this, func.apply(this.args));
+            }
+        })
+    }
+    _.mixin(_);
     return (root.underscore = root._ = _);
 })(this));
