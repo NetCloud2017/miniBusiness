@@ -6,20 +6,29 @@ const statesMap = {
     REJECTED: 'rejected',
 }
 
+function rejectPromise () {
 
+}
+function resolvePromise () {
+
+}
 class Promise {
     constructor (fn) {
         this.status = statesMap.PENDING;
         this.value = undefined;
         this.resson = undefined;
-        fn(this.resolve, this.reject)
+        fn(value => {
+            resolvePromise(this, value)
+        }, reason => {
+            rejectPromise(this, reason)
+        })
         
+    } 
+    then(onFulfilled, onRejected) {
+        const promise1 = this;
+        const promise2 = new Promise(()=>{});
+        if(promise1.status === statesMap.FULFILLED) {
+            
+        }
     }
-    resolve () {
-
-    }
-    reject () {
-
-    }
-  
 }
