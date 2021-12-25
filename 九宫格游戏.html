@@ -29,7 +29,6 @@
                 height: 302px;
                 width: 302px;
                 border: 1px solid #000;
-                
             }
 
             .game .gift {
@@ -53,8 +52,6 @@
                 order: 6;
                 border-top: 1px solid #000;
                 border-bottom: 1px solid #000;
-                
-
             }
 
             .game .gift:nth-child(3) {
@@ -106,7 +103,6 @@
 
             const gameDom = document.querySelector(".game"),
                 giftDomList = [],
-                
                 gameModle = "fixed"; //  random 随机模式 各个适配中奖概率随机生成， control 可控模式 ， 适配中奖概率 控制生成 , fixed 默认所有商品中奖概率相等。
             /*
             gameModle = "random",
@@ -127,10 +123,9 @@
 
             async function controlGiftRate(modle, gift, rate) {
                 try {
-
                     switch (modle) {
                         case "random":
-                            goods = await createRandomRate(goods) //  .catch(err => console.log(err)) 不能把catch 放到这里， 否则 catch 触发后 会 赋值给 goods ;
+                            goods = await createRandomRate(goods); //  .catch(err => console.log(err)) 不能把catch 放到这里， 否则 catch 触发后 会 赋值给 goods ;
                             break;
                         case "control":
                             let otherRate = (100 - rate) / (goods.length - 1);
@@ -147,8 +142,8 @@
                             }));
                     }
                 } catch (err) {
-                    //  不写则报错： Uncaught (in promise)  
-                    console.log(err, 'exxx')
+                    //  不写则报错： Uncaught (in promise)
+                    console.log(err, "exxx");
                 }
             }
             console.log(goods);
@@ -194,15 +189,14 @@
             }
 
             // 抽取奖品
-            console.log(goods, 'xxx');
+            console.log(goods, "xxx");
             let playing = false;
             function drawPrizes() {
-                
                 if (playing) return;
                 playing = true;
                 let gift = Math.random() * 100 + 1,
                     nearlyRate = 0;
-                    console.log(goods, 'xxx');
+                console.log(goods, "xxx");
                 goods.forEach((i, index) => {
                     // 确定中奖奖品
                     nearlyRate += i.giftRate;
@@ -233,27 +227,26 @@
                 let runTimes = times(),
                     currentIndex = 0,
                     activeDomIndex = 0;
-                    console.log(runTimes, gift, '3');
+                console.log(runTimes, gift, "3");
                 let timer = setTimeout(function runGrid() {
                     let _timer = setTimeout(() => {
-                        if (currentIndex <= runTimes.length ) {
+                        if (currentIndex <= runTimes.length) {
                             runGrid();
                         } else {
-                            playing = false
+                            playing = false;
                         }
                         timer && clearTimeout(timer);
                         _timer && clearTimeout(_timer);
                     }, runTimes[currentIndex]);
-                    giftDomList.forEach(dom => {
-                        dom.className = 'gift'
-                    })
-                    if (activeDomIndex > goods.length -1) {
-                        activeDomIndex = 0
+                    giftDomList.forEach((dom) => {
+                        dom.className = "gift";
+                    });
+                    if (activeDomIndex > goods.length - 1) {
+                        activeDomIndex = 0;
                     }
-                    giftDomList[activeDomIndex].className = 'gift active'
+                    giftDomList[activeDomIndex].className = "gift active";
                     currentIndex += 1;
-                    activeDomIndex +=1
-
+                    activeDomIndex += 1;
                 }, 0);
             }
         </script>
