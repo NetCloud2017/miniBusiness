@@ -20,7 +20,8 @@
   "homepage": "https://github.com/NetCloud2017/miniBusiness#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "nodemon": "^2.0.14"
+    "nodemon": "^2.0.14",
+    "vue": "^2.6.14"
   },
   "devDependencies": {
     "editorconfig": "^0.15.3"
