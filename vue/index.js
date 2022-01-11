@@ -195,4 +195,15 @@ let store = new Store({
             console.log(mutation);
         })
     ]
-})
+});
+
+// document.getElementById("add").addEventListener("click", function() {
+//   // data.count++;
+//   store.commit("addCount", 1);
+// });
+// let str;
+// watch(() => {
+//   str = `hello ${store.state.count}`;
+//   document.getElementById("app").innerText = str;
+// });
+
