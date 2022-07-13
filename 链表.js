@@ -201,31 +201,62 @@ ListClass.prototype.join = function (string) {
     return str;
 };
 
-let linkedList = new ListClass();
-linkedList.append(10);
-linkedList.append(20);
-linkedList.append(30);
+// 单向链表检测：
+// let linkedList = new ListClass();
+// linkedList.append(10);
+// linkedList.append(20);
+// linkedList.append(30);
 
-console.log(linkedList.join("--"));
+// console.log(linkedList.join("--"));
 
-linkedList.insert(0, 5);
-linkedList.insert(2, 15);
-linkedList.insert(4, 25);
+// linkedList.insert(0, 5);
+// linkedList.insert(2, 15);
+// linkedList.insert(4, 25);
 
-console.log(linkedList.join("--"));
+// console.log(linkedList.join("--"));
 
-console.log(linkedList.removeAt(0));
-console.log(linkedList.removeAt(1));
-console.log(linkedList.removeAt(2));
-console.log(linkedList.join("--"));
+// console.log(linkedList.removeAt(0));
+// console.log(linkedList.removeAt(1));
+// console.log(linkedList.removeAt(2));
+// console.log(linkedList.join("--"));
 
-console.log(linkedList.indexOf(20));
+// console.log(linkedList.indexOf(20));
 
-linkedList.remove(20);
+// linkedList.remove(20);
 
-console.log(linkedList.join("--"));
+// console.log(linkedList.join("--"));
 
-console.log(linkedList.find(10));
+// console.log(linkedList.find(10));
 
-linkedList.clear();
-console.log(linkedList.size());
+// linkedList.clear();
+// console.log(linkedList.size());
+
+// 双向链表检测
+let doubleLinkedList = new ListClass()
+doubleLinkedList.append(10)
+doubleLinkedList.append(15)
+doubleLinkedList.append(20)
+doubleLinkedList.append(25)
+console.log(doubleLinkedList.join("<->"))
+
+console.log(doubleLinkedList.getElementAt(0).value)
+console.log(doubleLinkedList.getElementAt(1).value)
+console.log(doubleLinkedList.getElementAt(5))
+
+console.log(doubleLinkedList.indexOf(10))
+console.log(doubleLinkedList.indexOf(25))
+console.log(doubleLinkedList.indexOf(50))
+
+doubleLinkedList.insert(0, 5)
+doubleLinkedList.insert(3, 18)
+doubleLinkedList.insert(6, 30)
+console.log(doubleLinkedList.join("<->"))
+
+console.log(doubleLinkedList.find(10).value)
+console.log(doubleLinkedList.removeAt(0))
+console.log(doubleLinkedList.removeAt(1))
+console.log(doubleLinkedList.removeAt(5))
+console.log(doubleLinkedList.remove(10))
+console.log(doubleLinkedList.remove(100))
+
+console.log(doubleLinkedList.join("<->"))
