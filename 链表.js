@@ -105,9 +105,19 @@ ListClass.prototype.removeAt = function (index) {
         let preNode = this.getElementAt(index - 1);
         if (index === 0) {
             this.head = cur.next;
+            this.head.prev = null;
+            if (this.length === 1) this.tail = null;
+        } else if (index === this.length - 1) {
+            cur = this.tail;
+            this.tail = cur.prev;
+            this.tail.next = null;
         } else {
-            cur = preNode.next;
+            //  中间元素
+            // cur = preNode.next;
+            cur = this.getElementAt(index);
+            preNode = cur.prev;
             preNode.next = cur.next;
+            cur.next.prev = preNode;
         }
     } else {
         return null;
