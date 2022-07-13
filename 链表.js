@@ -34,12 +34,13 @@ ListClass.prototype.getElementAt = function (index) {
 };
 // 获取链表中某个节点
 ListClass.prototype.find = function (val) {
-    let headCur = this.head, tailCur = this.tail;
+    let headCur = this.head,
+        tailCur = this.tail;
 
     while (headCur) {
         if (headCur.value === val) return headCur;
         headCur = headCur.next;
-        if(tailCur.value === val) return tailCur
+        if (tailCur.value === val) return tailCur;
         tailCur = tailCur.prev;
     }
     return null;
@@ -55,9 +56,9 @@ ListClass.prototype.append = function (val) {
     } else {
         // let cur = this.getElementAt(this.length - 1);
         // cur.next = node;
-        this.tail.next = node 
-        node.prev = this.tail
-        this.tail = node
+        this.tail.next = node;
+        node.prev = this.tail;
+        this.tail = node;
     }
     this.length++;
 };
@@ -66,17 +67,32 @@ ListClass.prototype.append = function (val) {
 ListClass.prototype.insert = function (index, val) {
     if (!this.inRange(index)) return false;
 
-    let newNode = new ListNode(val);
-    if (index == 0) {
-        newNode.next = this.head;
-        this.head = newNode;
+    if (index === this.length) {
+        this.append(val);
     } else {
-        let preNode = this.getElementAt(index - 1);
-        newNode.next = preNode.next; // 这时指向的是index 这个节点。
-        preNode.next = newNode;
+        let newNode = new ListNode(val);
+
+        if (index == 0) {
+            if (this.head === null) {
+                this.head = newNode;
+                this.tail = newNode;
+            } else {
+                newNode.next = this.head;
+                this.head.prev = newNode;
+                this.head = newNode;
+            }
+        } else {
+            let preNode = this.getElementAt(index - 1);
+            let curNode = preNode.next;
+
+            newNode.next = curNode; // 这时指向的是index 这个节点。
+            newNode.prev = preNode;
+            preNode.next = newNode;
+            curNode.prev = newNode;
+        }
+        this.length++;
     }
 
-    this.length++;
     return true;
 };
 ListClass.prototype.inRange = function (index) {
