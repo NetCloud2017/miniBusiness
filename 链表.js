@@ -14,10 +14,22 @@ function ListClass(node) {
 // 获取链表中索引所对应的元素
 ListClass.prototype.getElementAt = function (index) {
     if (!this.inRange(index)) return null;
-    let cur = this.head;
-    while (index--) {
-        cur = cur.next;
+    let cur = null;
+    // 当索引大于链表长度 length/2 时，我们可以从后往前找，反之则从前向后找，这样可以更快找到该节点元素
+    if (index > Math.floor(this.length / 2)) {
+        cur = this.tail;
+        let i = this.length - 1;
+        while (i > index) {
+            cur = cur.prev;
+            i--;
+        }
+    } else {
+        cur = this.head;
+        while (index--) {
+            cur = cur.next;
+        }
     }
+
     return cur;
 };
 // 获取链表中某个节点
