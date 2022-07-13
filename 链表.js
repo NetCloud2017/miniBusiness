@@ -51,9 +51,13 @@ ListClass.prototype.append = function (val) {
 
     if (!this.head) {
         this.head = node;
+        this.tail = node;
     } else {
-        let cur = this.getElementAt(this.length - 1);
-        cur.next = node;
+        // let cur = this.getElementAt(this.length - 1);
+        // cur.next = node;
+        this.tail.next = node 
+        node.prev = this.tail
+        this.tail = node
     }
     this.length++;
 };
