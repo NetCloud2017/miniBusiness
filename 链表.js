@@ -1,16 +1,19 @@
 // 参考地址： https://juejin.cn/post/6921515173614354445#heading-26
 function ListNode(val) {
     this.value = val;
+
     this.next = null;
+    this.prev = null;
 }
 
 function ListClass(node) {
     this.length = 0;
     this.head = node || null;
+    this.tail = null;
 }
 // 获取链表中索引所对应的元素
 ListClass.prototype.getElementAt = function (index) {
-    if (index < 0 || index > this.length - 1) return null;
+    if (!this.inRange(index)) return null;
     let cur = this.head;
     while (index--) {
         cur = cur.next;
@@ -157,18 +160,18 @@ linkedList.insert(4, 25);
 
 console.log(linkedList.join("--"));
 
-console.log(linkedList.removeAt(0))
-console.log(linkedList.removeAt(1))
-console.log(linkedList.removeAt(2))
-console.log(linkedList.join("--"))
+console.log(linkedList.removeAt(0));
+console.log(linkedList.removeAt(1));
+console.log(linkedList.removeAt(2));
+console.log(linkedList.join("--"));
 
-console.log(linkedList.indexOf(20))
+console.log(linkedList.indexOf(20));
 
-linkedList.remove(20)
+linkedList.remove(20);
 
-console.log(linkedList.join("--"))
+console.log(linkedList.join("--"));
 
-console.log(linkedList.find(10))
+console.log(linkedList.find(10));
 
-linkedList.clear()
-console.log(linkedList.size())
+linkedList.clear();
+console.log(linkedList.size());
