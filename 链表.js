@@ -34,10 +34,13 @@ ListClass.prototype.getElementAt = function (index) {
 };
 // 获取链表中某个节点
 ListClass.prototype.find = function (val) {
-    let cur = this.head;
-    while (cur) {
-        if (cur.value === val) return cur;
-        cur = cur.next;
+    let headCur = this.head, tailCur = this.tail;
+
+    while (headCur) {
+        if (headCur.value === val) return headCur;
+        headCur = headCur.next;
+        if(tailCur.value === val) return tailCur
+        tailCur = tailCur.prev;
     }
     return null;
 };
