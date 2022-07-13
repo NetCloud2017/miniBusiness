@@ -128,7 +128,7 @@ ListClass.prototype.removeAt = function (index) {
 
 // 获取链表中给定元素的索引
 ListClass.prototype.indexOf = function (val) {
-    //  方法1
+    // 单向链表 方法1
     // let cur = this.head;
     // for (let i = 0; i < this.length; i++) {
     //     if (cur.val === val) return i;
@@ -137,19 +137,28 @@ ListClass.prototype.indexOf = function (val) {
     // return -1;
 
     let index = 0;
-    let cur = this.head;
+    let headCur = this.head,
+        tailCur = this.tail;
+    if (headCur.value === val) {
+        return index;
+    }
+    if (tailCur.value === val) {
+        index = this.length - 1;
+        return index;
+    }
     do {
-        if (cur.value === val) {
-            break;
+        if (headCur.value === val) {
+            return index;
         }
-        if (index === this.length - 1 && cur.value !== val) {
-            index = -1;
+        if (tailCur.value === val) {
+            return this.length - index;
         }
+        headCur = headCur.next;
+        tailCur = tailCur.prev;
         index++;
-        cur = cur.next;
-    } while (index < this.length - 1);
+    } while (index < this.length);
 
-    return index;
+    return -1;
 };
 // 删除链表中对应的元素
 ListClass.prototype.remove = function (val) {
