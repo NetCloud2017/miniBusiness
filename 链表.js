@@ -13,7 +13,7 @@ ListClass.prototype.getElementAt = function (index) {
     if (index < 0 || index > this.length - 1) return null;
     let cur = this.head;
     while (index--) {
-        cur = this.next;
+        cur = cur.next;
     }
     return cur;
 };
@@ -21,7 +21,7 @@ ListClass.prototype.getElementAt = function (index) {
 ListClass.prototype.find = function (val) {
     let cur = this.head;
     while (cur) {
-        if (cur === val) return cur;
+        if (cur.value === val) return cur;
         cur = cur.next;
     }
     return null;
@@ -30,6 +30,7 @@ ListClass.prototype.find = function (val) {
 // 向链表中追加节点
 ListClass.prototype.append = function (val) {
     let node = new ListNode(val);
+
     if (!this.head) {
         this.head = node;
     } else {
@@ -42,6 +43,7 @@ ListClass.prototype.append = function (val) {
 // 在链表的指定位置插入节点
 ListClass.prototype.insert = function (index, val) {
     if (!this.inRange(index)) return false;
+
     let newNode = new ListNode(val);
     if (index == 0) {
         newNode.next = this.head;
@@ -56,13 +58,13 @@ ListClass.prototype.insert = function (index, val) {
     return true;
 };
 ListClass.prototype.inRange = function (index) {
-    index < 0 || index >= this.length ? false : true;
+    return index < 0 || index >= this.length ? false : true;
 };
 // 删除链表中指定位置的元素，并返回这个元素的值
 ListClass.prototype.removeAt = function (index) {
+    let cur = this.head;
     if (this.inRange(index)) {
         let preNode = this.getElementAt(index - 1);
-        let cur = this.head;
         if (index === 0) {
             this.head = cur.next;
         } else {
@@ -73,7 +75,7 @@ ListClass.prototype.removeAt = function (index) {
         return null;
     }
     this.length--;
-    return cur.val;
+    return cur.value;
 };
 
 // 获取链表中给定元素的索引
@@ -139,7 +141,34 @@ ListClass.prototype.join = function (string) {
         }
         cur = cur.next;
     }
-    return str
+    return str;
 };
 
+let linkedList = new ListClass();
+linkedList.append(10);
+linkedList.append(20);
+linkedList.append(30);
 
+console.log(linkedList.join("--"));
+
+linkedList.insert(0, 5);
+linkedList.insert(2, 15);
+linkedList.insert(4, 25);
+
+console.log(linkedList.join("--"));
+
+console.log(linkedList.removeAt(0))
+console.log(linkedList.removeAt(1))
+console.log(linkedList.removeAt(2))
+console.log(linkedList.join("--"))
+
+console.log(linkedList.indexOf(20))
+
+linkedList.remove(20)
+
+console.log(linkedList.join("--"))
+
+console.log(linkedList.find(10))
+
+linkedList.clear()
+console.log(linkedList.size())
