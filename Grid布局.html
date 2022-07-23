@@ -199,16 +199,126 @@
                 */
             }
 
+            /* 
+             项目属性
+
+            项目的位置是可以指定的，具体方法就是指定项目的四个边框，分别定位在哪根网格线。
+            grid-column-start属性：左边框所在的垂直网格线
+            grid-column-end属性：右边框所在的垂直网格线
+            grid-row-start属性：上边框所在的水平网格线
+            grid-row-end属性：下边框所在的水平网格线
+
+            */
+            /* .item-1 {
+                grid-column-start: 2;
+                grid-column-end: 4;
+            } */
+            /* 
+            只指定了1号项目的左右边框，没有指定上下边框，所以会采用默认位置，
+            即上边框是第一根水平网格线，下边框是第二根水平网格线。
+
+            除了1号项目以外，其他项目都没有指定位置，
+            由浏览器自动布局，这时它们的位置由容器的grid-auto-flow属性决定，
+            这个属性的默认值是row
+            */
+            /* 
+            除了指定为第几个网格线，还可以指定为网格线的名字。
+            .item-1 {
+                grid-column-start: header-start;
+                grid-column-end: header-end;
+            }
+            
+            */
+            /* 
+            这四个属性的值还可以使用span关键字，表示"跨越"，
+            即左右边框（上下边框）之间跨越多少个网格。
+            */
+
+            /* 
+            1号项目的左边框距离右边框跨越2个网格
+            .item-1 {
+                grid-column-start: span 2;
+            } 
+            使用这四个属性，如果产生了项目的重叠，则使用z-index属性指定项目的重叠顺序。
+            */
+
+            /* 
+            grid-column 属性，
+            grid-column属性是grid-column-start和grid-column-end的合并简写形式，
+            
+            grid-row 属性
+            grid-row属性是grid-row-start属性和grid-row-end的合并简写形式。
+            
+            .item {
+                grid-column: <start-line> / <end-line>;
+                grid-row: <start-line> / <end-line>;
+            }
+            */
+            /* .item-1 {
+                grid-column: 1 / 3;
+                grid-row: 1 / 2;
+            } */
+
+            /*
+            斜杠以及后面的部分可以省略，默认跨越一个网格。
+            一格即位置不变
+            .item-1 {
+                grid-column: 1;
+                grid-row: 1;
+            }
+            */
+
+            /* 
+            grid-area属性指定项目放在哪一个区域。
+            */
+
+            .item-1 {
+                grid-area: d;
+            }
+            /* 
+            grid-area属性还可用作grid-row-start、grid-column-start、grid-row-end、
+            grid-column-end的合并简写形式，直接指定项目的位置。
+            
+            .item {
+                grid-area: <row-start> / <column-start> / <row-end> /
+                    <column-end>;
+            }
+            .item-1 {
+                grid-area: 1 / 1 / 3 / 3;
+            }
+            */
+
+            /* 
+            justify-self 属性，
+            justify-self属性设置单元格内容的水平位置（左中右），
+            跟justify-items属性的用法完全一致，但只作用于单个项目。
+
+            align-self 属性，
+            align-self属性设置单元格内容的垂直位置（上中下），
+            跟align-items属性的用法完全一致，也是只作用于单个项目。
+
+            .item {
+                justify-self: start | end | center | stretch;
+                align-self: start | end | center | stretch;
+            }
+
+            place-self 属性
+            place-self属性是align-self属性和justify-self属性的合并简写形式。
+            place-self: <align-self> <justify-self>;
+            如果省略第二个值，place-self属性会认为这两个值相等。   
+            */
+
             [class^="item"] {
                 height: 50px;
                 /* height: auto; */
                 width: 50px;
             }
-            .item:nth-child(odd) {
+
+            [class^="item"]:nth-child(odd) {
                 background-color: skyblue;
                 border: 1px solid red;
             }
-            .item:nth-child(even) {
+            [class^="item"]:nth-child(even) {
                 background-color: greenyellow;
                 border: 1px solid blue;
             }
@@ -216,15 +326,15 @@
     </head>
     <body>
         <div class="flexWrap">
-            <div class="item">1</div>
-            <div class="item">2</div>
-            <div class="item">3</div>
-            <div class="item">4</div>
-            <div class="item">5</div>
-            <div class="item">6</div>
-            <div class="item">7</div>
-            <div class="item">8</div>
-            <div class="item">9</div>
+            <div class="item-1">1</div>
+            <div class="item-2">2</div>
+            <div class="item-3">3</div>
+            <div class="item-4">4</div>
+            <div class="item-5">5</div>
+            <div class="item-6">6</div>
+            <div class="item-7">7</div>
+            <div class="item-8">8</div>
+            <div class="item-9">9</div>
         </div>
     </body>
 </html>
