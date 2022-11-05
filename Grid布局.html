@@ -21,8 +21,8 @@
                 width: 600px;
                 height: 600px;
                 /* 定义网格大小 */
-                /* grid-template-columns: 100px 100px 100px; */
-                /* 上面的 这种写法可以用 repeat() 方法替换 */
+                grid-template-columns: 30px 100px 100px;
+                /* 上面的 这种写法可以用 r3epeat() 方法替换 */
                 /* grid-template-columns: repeat(3, 100px); */
                 /* repeat() 也可以定义某种模式
                                 如下 ： 3列，每列 都是以 2 2 6
@@ -34,7 +34,8 @@
                             如果希望每一行（或每一列）容纳尽可能多的单元格，
                             这时可以使用auto-fill关键字表示自动填充。
                             */
-                /* grid-template-columns: repeat(auto-fill, 100px); 表示每一列的宽度是100px */
+                /* grid-template-columns: repeat(auto-fill, 100px);  */
+                /* 表示每一列的宽度是100px */
 
                 /*
                             为了方便表示比例关系，网格布局提供了fr关键字（fraction 的缩写，意为"片段"）。
@@ -52,7 +53,7 @@
                             它接受两个参数，分别为最小值和最大值。
                             minmax(100px, 1fr)表示列宽不小于100px，不大于1fr。
                             */
-                grid-template-columns: 1fr 1fr minmax(100px, 1fr);
+                /* grid-template-columns: 1fr 1fr minmax(100px, 1fr); */
 
                 /*
                             第二列的宽度，基本上等于该列单元格的最大宽度，
@@ -66,7 +67,7 @@
                             grid-template-rows: [r1] 100px [r2] 100px [r3] auto [r4];
                             网格布局允许同一根线有多个名字，比如[fifth-line row-5]。
                             */
-                grid-template-rows: 100px 100px 100px;
+                /* grid-template-rows: auto 100px 100px; */
                 /* grid-template-rows: repeat(3, auto); */
 
                 /*
@@ -87,7 +88,7 @@
                             grid-gap: <grid-row-gap> <grid-column-gap>;
                             如果grid-gap省略了第二个值，浏览器认为第二个值等于第一个值
                             */
-                grid-gap: 20px 25px;
+                /* grid-gap: 20px 25px; */
 
                 /* 一个区域由单个或多个单元格组成。grid-template-areas属性用于定义区域。 */
                 /* grid-template-areas:
@@ -108,10 +109,10 @@
 
                 /* 如果某些区域不需要利用，则使用"点"（.）表示。 */
 
-                grid-template-areas:
+                /* grid-template-areas:
                     "a . c"
                     "d . f"
-                    "g . i";
+                    "g . i"; */
                 /* 上面代码中，中间一列为点，表示没有用到该单元格，或者该单元格不属于任何区域。 */
 
                 /* 
@@ -124,7 +125,8 @@
                 默认值是row，即"先行后列"。也可以将它设成column，变成"先列后行"
                 */
 
-                grid-auto-flow: row; /*column row dense和column dense*/
+                /* grid-auto-flow: row;  */
+                /*column row dense和column dense*/
                 /* 
                 还可以设成row dense和column dense。这两个值主要用于，
                 某些项目指定位置以后，剩下的项目怎么自动放置。
@@ -149,8 +151,8 @@
                 place-items: <align-items> <justify-items>;
                 如果省略第二个值，则浏览器认为与第一个值相等。
                 */
-                justify-items: end;
-                align-items: end;
+                /* justify-items: end;
+                align-items: end; */
 
                 /* 
                 
@@ -175,7 +177,7 @@
                 如果省略第二个值，浏览器就会假定第二个值等于第一个值。
                 */
 
-                justify-content: center;
+                /* justify-content: center; */
 
                 /* 
                 
@@ -272,9 +274,9 @@
             grid-area属性指定项目放在哪一个区域。
             */
 
-            .item-1 {
+            /* .item-1 {
                 grid-area: d;
-            }
+            } */
             /* 
             grid-area属性还可用作grid-row-start、grid-column-start、grid-row-end、
             grid-column-end的合并简写形式，直接指定项目的位置。
@@ -309,9 +311,9 @@
             */
 
             [class^="item"] {
-                height: 50px;
+                /* height: 50px; */
                 /* height: auto; */
-                width: 50px;
+                /* width: 50px; */
             }
 
             [class^="item"]:nth-child(odd) {
